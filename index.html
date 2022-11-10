@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>Paint Web</title>
+</head>
+
+<body align="center" style="background-color:rgb(45, 148, 189)">
+    <h1>Paint</h1>
+    <canvas id="canvas" width="800" height="600" style="background-color: white;
+        border-style: ridge;
+        border-width: 10px;"></canvas>
+    <br>
+    <span>
+        <input placeholder="color" id="color" type="text">
+        <input placeholder="line width" id="width" type="text">
+    </span>
+    <script>
+        var mouseEvent = "empty";
+        var lastPositionOfX, lastPositionOfY;
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        var color = "blue";
+        var line = 2;
+        canvas.addEventListener("mousedown", myMouseDown);
+        function myMouseDown(e) {
+            color = document.getElementById("color").value;
+            line = document.getElementById("width").value;
+            mouseEvent = "mouseDown";
+        }
+        canvas.addEventListener("mouseup", myMouseUp);
+        function myMouseUp(e) {
+            mouseEvent = "mouseUp";
+        }
+        canvas.addEventListener("mouseleave", myMouseLeave);
+        function myMouseLeave(e) {
+            mouseEvent = "mouseLeave";
+        }
+        canvas.addEventListener("mousemove", myMouseMove);
+        function myMouseMove(e) {
+            mouseX = e.clientX - canvas.offsetLeft;
+            mouseY = e.clientY - canvas.offsetTop;
+            console.log("X=" + mouseX + " Y=" + mouseY);
+            if (mouseEvent == "mouseDown") {
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = line;
+                ctx.moveTo(lastMouseX, lastMouseY);
+                ctx.lineTo(mouseX, mouseY);
+                ctx.stroke();
+            }
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+        }
+        canvas.addEventListener("touchstart", myTouchStart);
+        function myTouchStart(e) {
+            touchX = e.touches[0].clientX - canvas.offsetLeft;
+            touchY = e.touches[0].clientY - canvas.offsetTop;
+            color = document.getElementById("color").value;
+            line = document.getElementById("width").value;
+            console.log("X=" + touchX + " Y=" + touchY);
+        }
+        canvas.addEventListener("touchmove", myTouchMove);
+        function myTouchMove(e) {
+            currentPositionOfTouchX = e.touches[0].clientX - canvas.offsetLeft;
+         currentPositionOfTouchY = e.touches[0].clientY - canvas.offsetTop;
+
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = line;
+
+        console.log("Ultima posição das coordenadas x e y = ");
+        console.log("x = " + lastPositionOfX + "y = " + lastPositionOfY);
+        ctx.moveTo(lastPositionOfX, lastPositionOfY);
+
+        console.log("Posição atual das coordenadas x e y = ");
+        console.log("x  = " + currentPositionOfTouchX + "y = " + currentPositionOfTouchY);
+        ctx.lineTo(currentPositionOfTouchX, currentPositionOfTouchY);
+        ctx.stroke();
+        
+
+        lastPositionOfX = currentPositionOfTouchX; 
+        lastPositionOfY = currentPositionOfTouchY;
+        }
+    </script>
+</body>
+
+</html>
